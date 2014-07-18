@@ -75,6 +75,7 @@ responses = {
 
 
 def _sort_qs_for_url(url):
+    """Sort query string parameters in desending order."""
     parsed = urlparse(url)
 
     if len(parsed.query) == 0:
