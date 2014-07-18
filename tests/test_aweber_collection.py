@@ -50,10 +50,13 @@ class TestAWeberCollection(TestCase):
         assert subscribers != False
         assert isinstance(subscribers, AWeberCollection)
         assert len(subscribers) == 1
-        assert subscribers[0].self_link == \
-                'https://api.aweber.com/1.0/accounts/1/lists/303449/subscribers/50205517'
-        assert request['url'] == \
-            '{0}?ws.op=find&email=joe%40example.com'.format(base_url)
+
+        self_link = 'https://api.aweber.com/1.0/accounts/1/lists/303449/subscribers/50205517'
+        assert subscribers[0].self_link == self_link
+
+        url = '{0}?ws.op=find&email=joe%40example.com'.format(base_url)
+        assert request['url'] == url
+            
 
     def test_find_should_handle_errors(self):
         base_url = '/accounts/1/lists/303449/subscribers'
