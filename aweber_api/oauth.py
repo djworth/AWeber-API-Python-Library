@@ -2,7 +2,7 @@ from urllib import urlencode
 import json
 import os
 
-import oauth2 as oauth
+from requests_oauthlib import OAuth1Session
 
 from aweber_api.base import APIException
 
@@ -12,7 +12,6 @@ class OAuthAdapter(object):
     def __init__(self, key, secret, base):
         self.key = key
         self.secret = secret
-        self.consumer = oauth.Consumer(key=self.key, secret=self.secret)
         self.api_base = base
 
     def _parse(self, response):
@@ -42,7 +41,7 @@ class OAuthAdapter(object):
         headers = {'Content-Type': content_type}
 
         resp, content = client.request(
-            url, method, body=body, headers=headers)
+            method, url, data=data, headers=headers)
 
         if int(resp['status']) >= 400:
             """
@@ -77,10 +76,13 @@ class OAuthAdapter(object):
     def _get_client(self):
         token = self.user.get_highest_priority_token()
         if token:
-            token = oauth.Token(token, self.user.token_secret)
-            client = oauth.Client(self.consumer, token=token)
+            client = OAuth1Session(self.key,
+                                   client_secret=self.secret,
+                                   resource_owner_key=token,
+                                   resource_owner_secret=self.user.token_secret
+                                   )
         else:
-            client = oauth.Client(self.consumer)
+            client = OAuth1Session(self.key, client_secret=self.secret)
 
         client.ca_certs = os.path.join(os.path.dirname(__file__), 'cacert.crt')
         return client

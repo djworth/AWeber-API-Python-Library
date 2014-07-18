@@ -72,7 +72,7 @@ responses = {
     }
 }
 
-def request(self, url, method, **kwargs):
+def request(self, method, url, **kwargs):
     """Return a tuple to simulate calling oauth2.Client.request."""
     (headers, file) = responses[method][url]
     if 'status' not in headers:
@@ -90,7 +90,7 @@ class MockAdapter(OAuthAdapter):
     """Mocked OAuthAdapter."""
     requests = []
 
-    @dingus.patch('oauth2.Client.request', request)
+    @dingus.patch('requests_oauthlib.OAuth1Session.request', request)
     def request(self, method, url, data={}, response='body'):
         """Mock the oauth.Client.request method"""
         req = super(MockAdapter, self).request(method, url, data, response)
