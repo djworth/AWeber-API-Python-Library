@@ -56,7 +56,6 @@ class TestAWeberCollection(TestCase):
 
         url = '{0}?ws.op=find&email=joe%40example.com'.format(base_url)
         assert request['url'] == url
-            
 
     def test_find_should_handle_errors(self):
         base_url = '/accounts/1/lists/303449/subscribers'

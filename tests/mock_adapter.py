@@ -93,8 +93,6 @@ def request(self, url, method, **kwargs):
 
     """Return a tuple to simulate calling oauth2.Client.request."""
 
-    url = _sort_qs_for_url(url)
-
     (headers, file) = responses[method][url]
     if 'status' not in headers:
         # assume 200 OK if not otherwise specified
@@ -114,6 +112,7 @@ class MockAdapter(OAuthAdapter):
     @mock.patch('requests_oauthlib.OAuth1Session.request', request)
     def request(self, method, url, data={}, response='body'):
         """Mock the oauth.Client.request method"""
+        url = _sort_qs_for_url(url)
         req = super(MockAdapter, self).request(method, url, data, response)
         self.requests.append({'method': method, 'url': url, 'data': data})
         return req
