@@ -31,7 +31,7 @@ setup(
         'requests-oauthlib>=0.4.1',
     ],
     tests_require=[
-        'dingus',
+        'mock',
         'coverage',
     ],
     setup_requires=[

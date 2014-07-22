@@ -1,7 +1,7 @@
 import json
 import os
 
-import dingus
+import mock
 
 from aweber_api import AWeberUser
 from aweber_api import OAuthAdapter
@@ -72,7 +72,9 @@ responses = {
     }
 }
 
-def request(self, method, url, **kwargs):
+
+def request(self, url, method, **kwargs):
+
     """Return a tuple to simulate calling oauth2.Client.request."""
     (headers, file) = responses[method][url]
     if 'status' not in headers:
@@ -90,11 +92,11 @@ class MockAdapter(OAuthAdapter):
     """Mocked OAuthAdapter."""
     requests = []
 
-    @dingus.patch('requests_oauthlib.OAuth1Session.request', request)
+    @mock.patch('requests_oauthlib.OAuth1Session.request', request)
     def request(self, method, url, data={}, response='body'):
         """Mock the oauth.Client.request method"""
         req = super(MockAdapter, self).request(method, url, data, response)
-        self.requests.append({'method' : method, 'url' : url, 'data' : data})
+        self.requests.append({'method': method, 'url': url, 'data': data})
         return req
 
     def __init__(self):

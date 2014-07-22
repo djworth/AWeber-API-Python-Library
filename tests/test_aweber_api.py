@@ -1,6 +1,6 @@
 from unittest import TestCase
 from mock_adapter import MockAdapter
-from dingus import Dingus
+from mock import Mock
 from aweber_api import (AWeberAPI, AWeberUser, ACCESS_TOKEN_URL, AUTHORIZE_URL,
                         REQUEST_TOKEN_URL, AWeberEntry)
 
@@ -19,9 +19,9 @@ class WhenGettingARequestToken(AWeberAPITest):
     def setUp(self):
         AWeberAPITest.setUp(self)
         self.response = "oauth_token=1234&oauth_token_secret=abcd"
-        self.aweber.adapter = Dingus()
+        self.aweber.adapter = Mock()
         self.aweber.adapter.user = AWeberUser()
-        self.aweber.adapter.request = Dingus(return_value=self.response)
+        self.aweber.adapter.request = Mock(return_value=self.response)
 
     def test_should_get_request_token(self):
         token, secret = self.aweber.get_request_token('http://localhost/demo')
@@ -57,9 +57,9 @@ class WhenGettingAnAccessToken(AWeberAPITest):
     def setUp(self):
         AWeberAPITest.setUp(self)
         self.response = "oauth_token=cheeseburger&oauth_token_secret=hotdog"
-        self.aweber.adapter = Dingus()
+        self.aweber.adapter = Mock()
         self.aweber.adapter.user = AWeberUser()
-        self.aweber.adapter.request = Dingus(return_value=self.response)
+        self.aweber.adapter.request = Mock(return_value=self.response)
 
         self.aweber.user.request_token = '1234'
         self.aweber.user.token_secret = 'abcd'
