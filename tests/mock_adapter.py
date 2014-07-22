@@ -1,10 +1,10 @@
 import json
 import os
 
-import mock
-
 from urlparse import urlparse, parse_qs
 from urllib import quote
+
+import mock
 
 from aweber_api import AWeberUser
 from aweber_api import OAuthAdapter
